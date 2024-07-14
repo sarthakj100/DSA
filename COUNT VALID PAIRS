@@ -1,0 +1,55 @@
+//https://practice.geeksforgeeks.org/contest/job-a-thon-34-hiring-challenge/problems
+//COUNT VALID PAIRS
+
+
+
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter ot = new PrintWriter(System.out);
+        int t = Integer.parseInt(br.readLine());
+        while (t-- > 0) {
+            String s[] = br.readLine().trim().split(" ");
+            int n = Integer.parseInt(s[0]), k = Integer.parseInt(s[1]);
+            s = br.readLine().trim().split(" ");
+            int arr[] = new int[n];
+            for (int i = 0; i < n; i++) arr[i] = Integer.parseInt(s[i]);
+            ot.println(new Solution().CountPairs(n, k, arr));
+            ot.flush();
+        }
+        ot.close();
+    }
+}
+// } Driver Code Ends
+
+
+class Solution {
+    public int CountPairs(int n, int k, int arr[]) {
+        HashMap<Long,ArrayList<Long>> map = new HashMap<>();
+        int count=0;
+        long M = 1000000007;
+        for(int i=1;i<=n;i++){
+            if(map.get(arr[i-1]%M)==null){
+                ArrayList<Long> a1 = new ArrayList<>();
+                a1.add((long) i);
+                map.put(arr[i-1]%M,a1);
+            }
+            else{
+                ArrayList<Long> a1 = map.get(arr[i-1]%M);
+                for(int j=0;j<a1.size();j++){
+                    long t = a1.get(j)+i;
+                    if(t%k==0) count++;
+                }
+                a1.add(i%M);
+                map.put(arr[i-1]%M,a1);
+                
+            }
+        }
+        return count;
+        // Code Here.
+    }
+}
