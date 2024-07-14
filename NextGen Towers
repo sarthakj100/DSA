@@ -1,0 +1,80 @@
+//https://practice.geeksforgeeks.org/contest/job-a-thon-hiring-challenge-1/problems
+//NextGen Towers
+
+
+
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*; 
+class GFG{
+    public static void main(String args[]) throws IOException { 
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        int t = Integer.parseInt(read.readLine());
+        
+        while(t-- > 0){
+            String input_line[] = read.readLine().trim().split("\\s+");
+            int N = Integer.parseInt(input_line[0]);
+            int M = Integer.parseInt(input_line[1]);
+            int X = Integer.parseInt(input_line[2]);
+            
+            ArrayList<ArrayList<Integer>> connections = new ArrayList<ArrayList<Integer>>();
+            
+            for(int i=0;i<M;i++){
+                input_line = read.readLine().trim().split("\\s+");
+                ArrayList<Integer> c = new ArrayList<Integer>();
+                c.add(Integer.parseInt(input_line[0]));
+                c.add(Integer.parseInt(input_line[1]));
+                connections.add(c);
+            }
+            Solution ob = new Solution();
+            int ans = ob.maxTowers(N, M, connections, X);
+            out.println(ans);
+        }
+        out.flush();
+    } 
+} 
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution {
+    int maxTowers(int N, int M, ArrayList<ArrayList<Integer>> connections, int X)
+    {
+        ArrayList<ArrayList<Integer>> gr = new ArrayList<ArrayList<Integer>>();
+        for(ArrayList x : connections)
+        {
+            gr.add(x.get(0),x.get(1));
+            gr.add(x.get(1),x.get(0));
+        }
+        
+        boolean vis[] = new boolean[gr.size()];
+        ArrayList<Integer> count = new ArrayList<>();
+        for(i=0;i<vis.length;i++)
+        {
+         if(vis[i]==false){
+         count.add(bfs(gr,X,vis,i));
+         }
+         
+        }
+        // code here
+    }
+    int bfs(ArrayList<ArrayList<Integer>> gr, int X, boolean vis[], int i){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(i);
+        int count;
+        while(q.isEmpty()==false){
+            count++;
+            int m= q.poll();
+            vis[m] = true;
+        for(int x: gr.get(m)){
+            if(vis[x]==false)
+            q.add(x);
+        }
+        }
+        return count;
+    }
+}
