@@ -1,0 +1,130 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+class IntMatrix {
+    public static int[][] input(BufferedReader br, int n, int m) throws IOException {
+        int[][] mat = new int[n][];
+
+        for (int i = 0; i < n; i++) {
+            String[] s = br.readLine().trim().split(" ");
+            mat[i] = new int[s.length];
+            for (int j = 0; j < s.length; j++) mat[i][j] = Integer.parseInt(s[j]);
+        }
+
+        return mat;
+    }
+
+    public static void print(int[][] m) {
+        for (var a : m) {
+            for (int e : a) System.out.print(e + " ");
+            System.out.println();
+        }
+    }
+
+    public static void print(ArrayList<ArrayList<Integer>> m) {
+        for (var a : m) {
+            for (int e : a) System.out.print(e + " ");
+            System.out.println();
+        }
+    }
+}
+
+class IntArray {
+    public static int[] input(BufferedReader br, int n) throws IOException {
+        String[] s = br.readLine().trim().split(" ");
+        int[] a = new int[n];
+        for (int i = 0; i < n; i++) a[i] = Integer.parseInt(s[i]);
+
+        return a;
+    }
+
+    public static void print(int[] a) {
+        for (int e : a) System.out.print(e + " ");
+        System.out.println();
+    }
+
+    public static void print(ArrayList<Integer> a) {
+        for (int e : a) System.out.print(e + " ");
+        System.out.println();
+    }
+}
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t;
+        t = Integer.parseInt(br.readLine());
+        while (t-- > 0) {
+
+            int n;
+            n = Integer.parseInt(br.readLine());
+
+            int m;
+            m = Integer.parseInt(br.readLine());
+
+            int rootServer;
+            rootServer = Integer.parseInt(br.readLine());
+
+            int[][] adj = IntMatrix.input(br, n - 1, 2);
+
+            int[] requests = IntArray.input(br, m);
+
+            Solution obj = new Solution();
+            ArrayList<ArrayList<Integer>> res =
+                obj.twoMax(n, m, rootServer, adj, requests);
+
+            IntMatrix.print(res);
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+
+
+
+class Solution {
+    public static ArrayList<ArrayList<Integer>> twoMax(int n, int m, int rootServer,
+                                                       int[][] edges, int[] requests) {
+        ArrayList<ArrayList<Integer>> gr = new ArrayList<>(n+1);
+        for(int i=0; i<n+1; i++){
+            gr.add(new ArrayList<Integer>());
+        }
+        for(int i=0; i<edges.length; i++){
+            gr.get(edges[i][0]).add(edges[i][1]);
+            gr.get(edges[i][1]).add(edges[i][0]);
+        }
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        for(int i=0; i<requests.length; i++){
+            boolean vis[] = new boolean[n+1];
+            ArrayList<Integer> max = new ArrayList<Integer>();
+            max.add(-1);
+            max.add(-1);
+            searchDFS(gr, requests[i], vis, rootServer, max);
+            res.add(max);
+        }
+        // code here
+        return res;
+    }
+    static void searchDFS(ArrayList<ArrayList<Integer>> gr, int key, boolean vis[], int root, ArrayList<Integer>
+    max){
+        if(root == key){
+            return;
+        }
+        vis[root] = true;
+        if(root>max.get(0)){
+            max.set(1,max.get(0));
+            max.set(0, root);
+        }
+        else if(root>max.get(1)){
+            max.set(1,root);
+        }
+        for (int i : gr.get(root)){
+            if (!vis[i]) {
+                searchDFS(gr, key, vis, i, max);
+            }
+        }
+    }
+}
